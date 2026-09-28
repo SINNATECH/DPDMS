@@ -1,0 +1,13 @@
+@echo off
+set DB_PASSWORD=root
+set ALERT_EMAIL_ENABLED=true
+set MAIL_HOST=smtp.gmail.com
+set MAIL_USERNAME=you@gmail.com
+set MAIL_PASSWORD=your-app-password
+set ALERT_EMAIL_RECIPIENTS=someone@example.com
+set ALERT_WHATSAPP_ENABLED=true
+set WHATSAPP_PHONE_NUMBER_ID=your-phone-number-id
+set WHATSAPP_ACCESS_TOKEN=your-access-token
+set ALERT_WHATSAPP_RECIPIENTS=263771234567,263772345678
+set JWT_SECRET=a-random-string-at-least-32-characters-long
+mvn spring-boot:run

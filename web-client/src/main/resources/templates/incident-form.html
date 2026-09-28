@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>DPDMS — New Incident</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="shell">
+
+    <div class="topbar">
+        <div>
+            <h1 th:text="'Record ' + ${hazardLabel} + ' incident'">New incident</h1>
+            <div class="system-tag">DPDMS — Rushinga Province</div>
+        </div>
+        <div class="identity">
+            <span th:text="${username} + ' · ' + ${role}"></span>
+            <form method="post" th:action="@{/logout}">
+                <button type="submit" class="secondary small">Log out</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="error-box" th:if="${error}" th:text="${error}"></div>
+
+    <div class="panel">
+        <form method="post" th:action="@{/incidents}">
+
+            <p class="section-label">Shared incident details</p>
+            <p class="section-hint">Captured the same way across every hazard, for consistent reporting.</p>
+
+            <div class="field-row">
+                <div>
+                    <label for="district">District</label>
+                    <input type="text" id="district" name="district" required/>
+                </div>
+                <div>
+                    <label for="province">Province</label>
+                    <input type="text" id="province" name="province" required/>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div>
+                    <label for="occurredAt">Date/time occurred</label>
+                    <input type="datetime-local" id="occurredAt" name="occurredAt" required/>
+                </div>
+                <div>
+                    <label for="severity">Severity</label>
+                    <select id="severity" name="severity" required>
+                        <option value="LOW">Low</option>
+                        <option value="MODERATE">Moderate</option>
+                        <option value="HIGH">High</option>
+                        <option value="CRITICAL">Critical</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div>
+                    <label for="latitude">Latitude</label>
+                    <input type="number" step="any" id="latitude" name="latitude" required/>
+                </div>
+                <div>
+                    <label for="longitude">Longitude</label>
+                    <input type="number" step="any" id="longitude" name="longitude" required/>
+                </div>
+            </div>
+
+            <hr class="section-divider"/>
+            <p class="section-label" th:text="${hazardLabel} + ' indicators'">Hazard-specific indicators</p>
+            <p class="section-hint">The five indicators required for this hazard type.</p>
+
+            <div th:each="field : ${fields}">
+                <label th:for="${field.name}" th:text="${field.label}"></label>
+
+                <input th:if="${field.type == 'text'}"
+                       type="text" th:id="${field.name}" th:name="${field.name}" required/>
+
+                <input th:if="${field.type == 'integer'}"
+                       type="number" step="1" th:id="${field.name}" th:name="${field.name}" required/>
+
+                <input th:if="${field.type == 'decimal'}"
+                       type="number" step="any" th:id="${field.name}" th:name="${field.name}" required/>
+
+                <select th:if="${field.type == 'select'}" th:id="${field.name}" th:name="${field.name}" required>
+                    <option th:each="opt : ${field.options}" th:value="${opt}" th:text="${opt}"></option>
+                </select>
+
+                <span th:if="${field.type == 'checkbox'}" style="display:flex; align-items:center; margin-top:8px;">
+                    <input type="checkbox" th:id="${field.name}" th:name="${field.name}"/>
+                    <span class="hint">Yes</span>
+                </span>
+            </div>
+
+            <button type="submit" class="primary">Record incident</button>
+            <a class="btn secondary" th:href="@{/incidents}">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

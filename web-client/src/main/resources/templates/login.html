@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>DPDMS — Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="shell-narrow">
+
+    <div class="hero-wordmark">
+        <div class="mark">DPDMS</div>
+        <div class="tagline">Rushinga Provincial Disaster Monitoring &amp; Management</div>
+    </div>
+
+    <div class="panel">
+        <h2>Sign in</h2>
+        <p class="hint" style="margin-top:2px;">Ward recorder, provincial supervisor, or national access.</p>
+
+        <div class="error-box" th:if="${error}" th:text="${error}"></div>
+
+        <form method="post" th:action="@{/login}">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus/>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required/>
+
+            <button type="submit" class="primary" style="width:100%;">Log in</button>
+        </form>
+    </div>
+
+    <p class="hint" style="text-align:center; color:#8FA3B8;">
+        Demo accounts: flood.recorder · flood.supervisor · national.user · admin — password
+        <code>password123</code> for every seeded account.
+    </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,330 @@
+/* ============================================================
+   DPDMS design tokens
+   Concept: a provincial emergency-operations tool. Content sits
+   on "field report" paper panels floating over a dark, topographic
+   backdrop — the terrain the system is actually monitoring.
+   ============================================================ */
+
+:root {
+  --midnight: #0F1B2D;
+  --midnight-2: #16273D;
+  --paper: #FBFCFE;
+  --paper-line: #DCE2E9;
+  --ink: #14202E;
+  --ink-soft: #4B5A6B;
+
+  --accent: #C4732B;      /* ochre — the one bold accent, used sparingly */
+  --accent-dark: #9C5A20;
+  --water: #1E7C8C;       /* teal — links, secondary functional accent */
+  --water-dark: #165F6B;
+
+  --status-pending: #B8862B;
+  --status-approved: #2F6E4F;
+  --status-rejected: #A6403A;
+  --status-corrections: #5B4B8A;
+
+  --radius: 3px;
+  --shadow-panel: 0 24px 60px -20px rgba(15, 27, 45, 0.55);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "IBM Plex Sans", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--midnight);
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(30, 124, 140, 0.25), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(196, 115, 43, 0.18), transparent 55%),
+    linear-gradient(180deg, var(--midnight) 0%, var(--midnight-2) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M-20 40 Q100 10 200 50 T420 30'/%3E%3Cpath d='M-20 100 Q100 60 200 110 T420 90'/%3E%3Cpath d='M-20 160 Q100 120 200 170 T420 150'/%3E%3Cpath d='M-20 220 Q100 260 200 210 T420 240'/%3E%3Cpath d='M-20 280 Q100 320 200 270 T420 300'/%3E%3Cpath d='M-20 340 Q100 380 200 330 T420 360'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: auto, auto, auto, 400px 400px;
+}
+
+h1, h2, h3 {
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px 0;
+}
+
+/* ---------- Shell / layout ---------- */
+
+.shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+
+.shell-narrow {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Ops-room topbar ---------- */
+
+.topbar {
+  background: rgba(15, 27, 45, 0.72);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #E7ECF2;
+}
+
+.topbar h1 {
+  color: #F4F6F8;
+  font-size: 19px;
+  margin: 0;
+}
+
+.topbar .system-tag {
+  color: #8FA3B8;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.topbar .identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: #C7D2DC;
+}
+
+.topbar form { margin: 0; }
+
+/* ---------- Panels (the "field report" surfaces) ---------- */
+
+.panel {
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  border-top: 3px solid var(--accent);
+}
+
+.panel.quiet {
+  border-top-color: var(--water);
+}
+
+/* ---------- Login hero ---------- */
+
+.hero-wordmark {
+  text-align: center;
+  margin: 64px 0 28px;
+}
+
+.hero-wordmark .mark {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  color: #F4F6F8;
+  letter-spacing: 0.01em;
+}
+
+.hero-wordmark .tagline {
+  color: #92A6BA;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* ---------- Forms ---------- */
+
+label {
+  display: block;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 16px;
+  margin-bottom: 5px;
+}
+
+input[type="text"], input[type="password"], input[type="number"],
+input[type="datetime-local"], select, textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: #FFFFFF;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--water);
+  outline-offset: 1px;
+  border-color: var(--water);
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+@media (max-width: 560px) {
+  .field-row { grid-template-columns: 1fr; }
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--paper-line);
+  margin: 28px 0 4px;
+}
+
+.section-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 2px;
+}
+
+.section-hint {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+/* ---------- Buttons ---------- */
+
+button, .btn {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 18px;
+  background: var(--ink);
+  color: white;
+  transition: background 0.15s ease;
+}
+button:hover, .btn:hover { background: #223349; }
+
+button.primary, .btn.primary {
+  background: var(--water);
+}
+button.primary:hover, .btn.primary:hover { background: var(--water-dark); }
+
+button.secondary, .btn.secondary {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--paper-line);
+}
+button.secondary:hover { background: #F1F4F7; }
+
+button.danger, .btn.danger {
+  background: var(--status-rejected);
+}
+button.danger:hover { background: #833330; }
+
+button.small {
+  padding: 5px 12px;
+  font-size: 12.5px;
+  margin: 2px 4px 2px 0;
+}
+
+.topbar button.secondary {
+  color: #C7D2DC;
+  border-color: rgba(255,255,255,0.2);
+}
+.topbar button.secondary:hover { background: rgba(255,255,255,0.08); }
+
+/* ---------- Table (the "ledger") ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--paper-line);
+}
+
+td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--paper-line);
+  font-size: 13.5px;
+}
+
+tr.row-PENDING { border-left: 3px solid var(--status-pending); }
+tr.row-APPROVED { border-left: 3px solid var(--status-approved); }
+tr.row-REJECTED { border-left: 3px solid var(--status-rejected); }
+tr.row-CORRECTIONS_REQUESTED { border-left: 3px solid var(--status-corrections); }
+
+.status-text {
+  font-weight: 600;
+  font-size: 12.5px;
+}
+.status-PENDING { color: var(--status-pending); }
+.status-APPROVED { color: var(--status-approved); }
+.status-REJECTED { color: var(--status-rejected); }
+.status-CORRECTIONS_REQUESTED { color: var(--status-corrections); }
+
+/* ---------- Workflow legend (genuinely sequential, so shown as a key) ---------- */
+
+.workflow-key {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.workflow-key li { display: flex; align-items: center; gap: 6px; }
+.workflow-key .dot {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+}
+
+/* ---------- Misc ---------- */
+
+.error-box {
+  background: #FBEEEC;
+  border-left: 3px solid var(--status-rejected);
+  color: #7A2E2A;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+  font-size: 13.5px;
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 12.5px;
+}
+
+a { color: var(--water); }

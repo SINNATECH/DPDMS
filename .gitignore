@@ -1,0 +1,22 @@
+# Maven build output — every service has one of these
+target/
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# IntelliJ (in case anyone on the team uses it)
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+log.txt
+
+# Environment files if you ever create one locally
+.env

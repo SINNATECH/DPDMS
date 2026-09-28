@@ -1,0 +1,15 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-service
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    # Fine for a coursework/dev environment with few, frequently restarting
+    # services. Disable in a real multi-node production registry.
+    enable-self-preservation: false

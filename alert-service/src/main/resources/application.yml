@@ -1,0 +1,75 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: alert-service
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/alert_db}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  # SMTP settings. Only used when ALERT_EMAIL_ENABLED=true.
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+dpdms:
+  jwt:
+    secret: ${JWT_SECRET:change-me-to-a-real-32-plus-character-secret}
+
+  alert:
+    # Shared secret the hazard services send in the X-Internal-Key header.
+    # Every hazard service reads the same ALERT_INTERNAL_KEY variable.
+    internal-key: ${ALERT_INTERNAL_KEY:change-me-internal-key}
+
+    # Alert thresholds
+    flood-danger-level-metres: ${ALERT_FLOOD_DANGER_LEVEL:4.0}
+    drought-crop-failure-percent: ${ALERT_DROUGHT_CROP_FAILURE:50}
+
+    email:
+      enabled: ${ALERT_EMAIL_ENABLED:false}
+      from: ${ALERT_EMAIL_FROM:alerts@dpdms.local}
+      recipients: ${ALERT_EMAIL_RECIPIENTS:}        # comma-separated addresses
+
+    whatsapp:
+      enabled: ${ALERT_WHATSAPP_ENABLED:false}
+      phone-number-id: ${WHATSAPP_PHONE_NUMBER_ID:}
+      access-token: ${WHATSAPP_ACCESS_TOKEN:}
+      api-version: v20.0
+      recipients: ${ALERT_WHATSAPP_RECIPIENTS:}     # comma-separated, e.g. 263771234567,263772345678
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  health:
+    mail:
+      enabled: false   # otherwise /actuator/health reports DOWN whenever no SMTP server is reachable
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

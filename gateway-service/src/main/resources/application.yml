@@ -1,0 +1,78 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true       # allows /FLOOD-SERVICE/** lb routing by app name too
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:8090"   # web-client's port — update if you choose a different one
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+      routes:
+        - id: flood-service
+          uri: lb://flood-service
+          predicates:
+            - Path=/api/floods/**
+
+        - id: drought-service
+          uri: lb://drought-service
+          predicates:
+            - Path=/api/droughts/**
+
+        - id: fire-service
+          uri: lb://fire-service
+          predicates:
+            - Path=/api/fires/**
+
+        - id: zoonotic-disease-service
+          uri: lb://zoonotic-disease-service
+          predicates:
+            - Path=/api/zoonotic-diseases/**
+
+        - id: mining-accident-service
+          uri: lb://mining-accident-service
+          predicates:
+            - Path=/api/mining-accidents/**
+
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        - id: report-service
+          uri: lb://report-service
+          predicates:
+            - Path=/api/reports/**
+
+        - id: alert-service
+          uri: lb://alert-service
+          predicates:
+            - Path=/api/alerts/**
+
+        - id: dashboard-service
+          uri: lb://dashboard-service
+          predicates:
+            - Path=/api/dashboard/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

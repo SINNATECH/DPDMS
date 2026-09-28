@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>DPDMS — Incidents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="shell">
+
+    <div class="topbar">
+        <div>
+            <h1 th:text="${hazardOptions.get(effectiveHazard)} + ' incidents'">Incidents</h1>
+            <div class="system-tag">DPDMS — Rushinga Province</div>
+        </div>
+        <div class="identity">
+            <span th:text="${username} + ' · ' + ${role}"></span>
+            <form method="post" th:action="@{/logout}">
+                <button type="submit" class="secondary small">Log out</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="error-box" th:if="${error}" th:text="${error}"></div>
+
+    <div class="panel quiet" th:if="${canPickHazard}" style="padding: 18px 32px;">
+        <label style="margin-top:0;">Viewing hazard</label>
+        <form method="get" th:action="@{/incidents}">
+            <select name="hazard" onchange="this.form.submit()" style="max-width: 280px;">
+                <option th:each="entry : ${hazardOptions}"
+                        th:value="${entry.key}"
+                        th:text="${entry.value}"
+                        th:selected="${entry.key == effectiveHazard}"></option>
+            </select>
+        </form>
+        <p class="hint">National and admin accounts can view any hazard — approved records only.</p>
+    </div>
+
+    <div class="panel">
+        <ul class="workflow-key">
+            <li><span class="dot" style="background:var(--status-pending);"></span>Pending — awaiting supervisor review</li>
+            <li><span class="dot" style="background:var(--status-approved);"></span>Approved — visible on dashboard &amp; reports</li>
+            <li><span class="dot" style="background:var(--status-rejected);"></span>Rejected</li>
+            <li><span class="dot" style="background:var(--status-corrections);"></span>Corrections requested</li>
+        </ul>
+
+        <a th:if="${canCreate}" class="btn primary" th:href="@{/incidents/new}">Record new incident</a>
+
+        <table style="margin-top: 8px;">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ward</th>
+                <th>District</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Occurred</th>
+                <th th:if="${canReview}">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="incident : ${incidents}" th:class="'row-' + ${incident.status}">
+                <td th:text="${incident.id}"></td>
+                <td th:text="${incident.ward}"></td>
+                <td th:text="${incident.district}"></td>
+                <td th:text="${incident.severity}"></td>
+                <td><span class="status-text" th:text="${incident.status}"
+                          th:classappend="'status-' + ${incident.status}"></span></td>
+                <td th:text="${incident.occurredAt}"></td>
+                <td th:if="${canReview}">
+                    <form method="post"
+                          th:if="${incident.status == 'PENDING'}"
+                          th:action="@{'/incidents/' + ${incident.id} + '/approve'}"
+                          style="display:inline;">
+                        <input type="hidden" name="hazard" th:value="${effectiveHazard}"/>
+                        <button type="submit" class="primary small">Approve</button>
+                    </form>
+                    <button th:if="${incident.status == 'PENDING'}"
+                            type="button" class="danger small"
+                            th:onclick="'showRejectForm(' + ${incident.id} + ')'">Reject</button>
+
+                    <form th:id="'reject-form-' + ${incident.id}"
+                          method="post"
+                          th:if="${incident.status == 'PENDING'}"
+                          th:action="@{'/incidents/' + ${incident.id} + '/reject'}"
+                          style="display:none; margin-top:8px; min-width: 220px;">
+                        <input type="hidden" name="hazard" th:value="${effectiveHazard}"/>
+                        <input type="text" name="comment" placeholder="Reason for rejection" required
+                               style="margin-bottom:6px;"/>
+                        <button type="submit" class="danger small">Confirm reject</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(incidents)}">
+                <td colspan="7" class="hint" style="padding: 20px 12px;">No incidents to show yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    function showRejectForm(id) {
+        document.getElementById('reject-form-' + id).style.display = 'block';
+    }
+</script>
+</body>
+</html>
